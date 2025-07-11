@@ -1,0 +1,61 @@
+h1{
+    text-align: center;
+}
+body{
+    font-family:'Times New Roman', Times, serif;
+    padding: 20px;
+}
+.attendancegrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
+    gap: 20px;
+    
+}
+.header{
+font-weight: bold;
+  background-color: #eee;
+  padding: 10px;
+  text-align: center;
+  font-size: 50px;
+}
+.cell{
+     padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 18px;
+}
+button{
+    cursor: pointer;
+}
+.prsnt{
+    padding: 8px 50px;
+  background-color: #4CAF50;
+font-weight: bold;
+text-align: center;
+font-size: 1rem;
+
+    
+}
+.absnt{
+    padding: 8px 50px;
+  background-color: lightcoral;
+  font-weight: bold;
+text-align: center;
+font-size: 1rem;
+}
+.ft{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+/* 👇 Hide elements in the PDF or print */
+@media print {
+  .hide-in-pdf {
+    display: none !important;
+  }
+}
+
+
+
+
