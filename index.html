@@ -7,398 +7,99 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #ffffff;
-    --bg2: #f5f5f3;
-    --bg3: #eeecea;
-    --text: #1a1a1a;
-    --text2: #6b6b68;
-    --border: rgba(0,0,0,0.12);
-    --border2: rgba(0,0,0,0.22);
-    --green-bg: #EAF3DE;
-    --green-text: #3B6D11;
-    --red-bg: #FCEBEB;
-    --red-text: #A32D2D;
-    --amber-bg: #FAEEDA;
-    --amber-text: #854F0B;
-    --accent: #1D9E75;
-    --accent-dark: #0F6E56;
-    --radius: 8px;
-    --radius-lg: 12px;
+    --bg: #ffffff; --bg2: #f5f5f3; --bg3: #eeecea;
+    --text: #1a1a1a; --text2: #6b6b68;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+    --green-bg: #EAF3DE; --green-text: #3B6D11;
+    --red-bg: #FCEBEB; --red-text: #A32D2D;
+    --amber-bg: #FAEEDA; --amber-text: #854F0B;
+    --accent: #1D9E75; --accent-dark: #0F6E56;
+    --radius: 8px; --radius-lg: 12px;
   }
-
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1e1e1c;
-      --bg2: #2a2a28;
-      --bg3: #333330;
-      --text: #f0ede8;
-      --text2: #9a9894;
-      --border: rgba(255,255,255,0.1);
-      --border2: rgba(255,255,255,0.2);
-      --green-bg: #173404;
-      --green-text: #C0DD97;
-      --red-bg: #501313;
-      --red-text: #F7C1C1;
-      --amber-bg: #412402;
-      --amber-text: #FAC775;
+      --bg: #1e1e1c; --bg2: #2a2a28; --bg3: #333330;
+      --text: #f0ede8; --text2: #9a9894;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
+      --green-bg: #173404; --green-text: #C0DD97;
+      --red-bg: #501313; --red-text: #F7C1C1;
+      --amber-bg: #412402; --amber-text: #FAC775;
     }
   }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg3);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 0;
-  }
-
-  header {
-    background: var(--bg);
-    border-bottom: 0.5px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  header .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  header .brand svg {
-    width: 28px;
-    height: 28px;
-    color: var(--accent);
-  }
-
-  header h1 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  header p {
-    font-size: 12px;
-    color: var(--text2);
-    margin-top: 1px;
-  }
-
-  header .header-btns {
-    display: flex;
-    gap: 8px;
-  }
-
-  .main {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px 16px;
-  }
-
-  /* Stats */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .stat {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 14px 16px;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 26px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .stat-lbl {
-    font-size: 12px;
-    color: var(--text2);
-    margin-top: 4px;
-  }
-
-  /* Toolbar */
-  .toolbar {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 12px 14px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-
-  .toolbar input[type="text"] {
-    flex: 1;
-    min-width: 180px;
-    padding: 8px 12px;
-    font-size: 13px;
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    background: var(--bg2);
-    color: var(--text);
-    outline: none;
-    height: 36px;
-  }
-
-  .toolbar input[type="text"]:focus {
-    border-color: var(--accent);
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 0 14px;
-    height: 36px;
-    font-size: 13px;
-    font-weight: 500;
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    background: var(--bg);
-    color: var(--text);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.1s;
-    text-decoration: none;
-  }
-
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; }
+  header { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 10; }
+  header h1 { font-size: 17px; font-weight: 600; }
+  header p  { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .main { max-width: 1000px; margin: 0 auto; padding: 24px 16px; }
+  .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 20px; }
+  .stat { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 600; line-height: 1; }
+  .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .toolbar { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 12px 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .toolbar input[type="text"] { flex: 1; min-width: 180px; padding: 8px 12px; font-size: 13px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg2); color: var(--text); outline: none; height: 36px; }
+  .toolbar input:focus { border-color: var(--accent); }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 0 14px; height: 36px; font-size: 13px; font-weight: 500; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); cursor: pointer; white-space: nowrap; transition: background 0.1s; }
   .btn:hover { background: var(--bg2); }
-
   .btn.green { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn.green:hover { background: var(--accent-dark); }
-
-  .btn.red-text { color: var(--red-text); }
-
-  /* Table */
-  .tbl-wrap {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    table-layout: fixed;
-  }
-
-  thead th {
-    background: var(--bg2);
-    padding: 10px 14px;
-    text-align: left;
-    font-weight: 500;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text2);
-    border-bottom: 0.5px solid var(--border);
-  }
-
+  .btn.danger { color: var(--red-text); }
+  .tbl-wrap { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  thead th { background: var(--bg2); padding: 10px 14px; text-align: left; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text2); border-bottom: 0.5px solid var(--border); }
   tbody tr { border-bottom: 0.5px solid var(--border); transition: background 0.1s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--bg2); }
-
-  td { padding: 10px 14px; vertical-align: middle; color: var(--text); }
-
-  .col-name { width: 22%; }
-  .col-roll { width: 13%; }
-  .col-att  { width: 32%; }
-  .col-pct  { width: 17%; }
-  .col-res  { width: 16%; }
-
-  /* Attendance buttons */
-  .att-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-  .att-btn {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: none;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.1s, opacity 0.15s;
-  }
+  td { padding: 9px 14px; vertical-align: middle; }
+  .col-sno { width: 6%; } .col-name { width: 38%; } .col-roll { width: 17%; } .col-att { width: 24%; } .col-res { width: 15%; }
+  .att-wrap { display: flex; align-items: center; gap: 8px; }
+  .att-btn { width: 30px; height: 30px; border-radius: 50%; border: none; font-size: 14px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.1s; }
   .att-btn:hover { transform: scale(1.12); }
-  .att-btn.present-btn { background: var(--green-bg); color: var(--green-text); }
-  .att-btn.absent-btn  { background: var(--red-bg);   color: var(--red-text);   }
-
-  .pill {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 9px;
-    border-radius: 20px;
-  }
-
+  .att-btn.pb { background: var(--green-bg); color: var(--green-text); }
+  .att-btn.ab { background: var(--red-bg); color: var(--red-text); }
+  .pill { font-size: 11px; font-weight: 500; padding: 2px 9px; border-radius: 20px; }
   .pill-p { background: var(--green-bg); color: var(--green-text); }
-  .pill-a { background: var(--red-bg);   color: var(--red-text);   }
-  .pill-u { color: var(--text2); font-size: 11px; }
-
-  /* Progress bar */
-  .pct-wrap { display: flex; align-items: center; gap: 8px; }
-  .pct-num  { font-size: 13px; font-weight: 500; min-width: 34px; }
-  .bar-bg   { flex: 1; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; min-width: 40px; }
-  .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
-
-  /* Result badge */
-  .badge {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 3px 10px;
-    border-radius: 20px;
-    display: inline-block;
-  }
+  .pill-a { background: var(--red-bg); color: var(--red-text); }
+  .pill-u { font-size: 11px; color: var(--text2); }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; display: inline-block; }
   .badge-pass { background: var(--green-bg); color: var(--green-text); }
-  .badge-risk { background: var(--amber-bg); color: var(--amber-text); }
-  .badge-fail { background: var(--red-bg);   color: var(--red-text);   }
-
-  /* Footer lists */
-  .footer-lists {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .list-card {
-    background: var(--bg);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 14px 16px;
-  }
-
-  .list-card h3 {
-    font-size: 12px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text2);
-    margin-bottom: 10px;
-  }
-
+  .badge-fail { background: var(--red-bg); color: var(--red-text); }
+  .badge-none { background: var(--bg2); color: var(--text2); }
+  .footer-lists { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .list-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
+  .list-card h3 { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text2); margin-bottom: 10px; }
   .name-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-
-  .chip {
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-
+  .chip { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
   .chip-p { background: var(--green-bg); color: var(--green-text); }
-  .chip-a { background: var(--red-bg);   color: var(--red-text);   }
-
+  .chip-a { background: var(--red-bg); color: var(--red-text); }
   .empty-msg { font-size: 13px; color: var(--text2); }
-
-  /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-  }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--bg);
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    width: 360px;
-    max-width: calc(100vw - 32px);
-  }
-
+  .modal { background: var(--bg); border: 0.5px solid var(--border2); border-radius: var(--radius-lg); padding: 24px; width: 360px; max-width: calc(100vw - 32px); }
   .modal h2 { font-size: 16px; font-weight: 600; margin-bottom: 18px; }
-
   .form-row { margin-bottom: 14px; }
   .form-row label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-  .form-row input {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 14px;
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius);
-    background: var(--bg2);
-    color: var(--text);
-    outline: none;
-  }
+  .form-row input { width: 100%; padding: 8px 12px; font-size: 14px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg2); color: var(--text); outline: none; }
   .form-row input:focus { border-color: var(--accent); }
-
   .modal-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
-
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: #1a1a1a;
-    color: #fff;
-    font-size: 13px;
-    padding: 10px 16px;
-    border-radius: var(--radius);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    z-index: 999;
-  }
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; color: #fff; font-size: 13px; padding: 10px 16px; border-radius: var(--radius); opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 999; }
   .toast.show { opacity: 1; }
-
-  .empty-row td {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text2);
-    font-size: 13px;
-  }
-
+  .empty-row td { text-align: center; padding: 2rem; color: var(--text2); font-size: 13px; }
   @media (max-width: 600px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stats { grid-template-columns: repeat(2,1fr); }
     .footer-lists { grid-template-columns: 1fr; }
-    .col-roll, .col-res { display: none; }
-    .col-name { width: 35%; }
-    .col-att  { width: 40%; }
-    .col-pct  { width: 25%; }
+    .col-sno, .col-roll { display: none; }
+    .col-name { width: 45%; } .col-att { width: 35%; } .col-res { width: 20%; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-      <rect x="9" y="3" width="6" height="4" rx="1"/>
-      <path d="M9 12l2 2 4-4"/>
-    </svg>
-    <div>
-      <h1>Student Attendance Tracker</h1>
-      <p id="date-str">CSE-C</p>
-    </div>
+  <div>
+    <h1>📋 Student Attendance Tracker</h1>
+    <p id="date-str">CSE-C</p>
   </div>
   <div class="header-btns">
     <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
@@ -408,31 +109,27 @@
 </header>
 
 <div class="main">
-
   <div class="stats" id="stats-bar"></div>
-
   <div class="toolbar">
     <input type="text" id="search" placeholder="Search by name or roll number…" oninput="render()">
     <button class="btn" onclick="markAll('P')">✓ All present</button>
     <button class="btn" onclick="markAll('A')">✗ All absent</button>
-    <button class="btn red-text" onclick="resetAll()">↺ Reset</button>
+    <button class="btn danger" onclick="resetAll()">↺ Reset</button>
   </div>
-
   <div class="tbl-wrap">
     <table>
       <thead>
         <tr>
+          <th class="col-sno">#</th>
           <th class="col-name">Name</th>
-          <th class="col-roll">Roll no</th>
+          <th class="col-roll">Roll No</th>
           <th class="col-att">Today</th>
-          <th class="col-pct">Overall %</th>
-          <th class="col-res">Result</th>
+          <th class="col-res">Status</th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
   <div class="footer-lists">
     <div class="list-card">
       <h3>✅ Present today</h3>
@@ -443,25 +140,13 @@
       <div id="absent-chips" class="name-chips"><span class="empty-msg">No one marked yet</span></div>
     </div>
   </div>
-
 </div>
 
-<!-- Add Student Modal -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <h2>Add new student</h2>
-    <div class="form-row">
-      <label>Full name</label>
-      <input id="m-name" type="text" placeholder="e.g. Priya Sharma" />
-    </div>
-    <div class="form-row">
-      <label>Roll number</label>
-      <input id="m-roll" type="text" placeholder="e.g. 22CS311" />
-    </div>
-    <div class="form-row">
-      <label>Sessions attended (out of 40)</label>
-      <input id="m-att" type="number" placeholder="e.g. 35" min="0" max="40" />
-    </div>
+    <div class="form-row"><label>Full name</label><input id="m-name" type="text" placeholder="STUDENT NAME" /></div>
+    <div class="form-row"><label>Roll number</label><input id="m-roll" type="text" placeholder="23881A05XX" /></div>
     <div class="modal-btns">
       <button class="btn" onclick="closeModal()">Cancel</button>
       <button class="btn green" onclick="addStudent()">Add student</button>
@@ -472,242 +157,225 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Data ──────────────────────────────────────────────────────────────────
-  let students = [
-    {id:1,  name:'Aarav Mehta',     roll:'22CS301', today:'', sessions:40, present:36},
-    {id:2,  name:'Bhanu Reddy',     roll:'22CS302', today:'', sessions:40, present:38},
-    {id:3,  name:'Chaitanya Rao',   roll:'22CS303', today:'', sessions:40, present:30},
-    {id:4,  name:'Divya Krishnan',  roll:'22CS304', today:'', sessions:40, present:40},
-    {id:5,  name:'Eswar Naidu',     roll:'22CS305', today:'', sessions:40, present:27},
-    {id:6,  name:'Fathima Begum',   roll:'22CS306', today:'', sessions:40, present:35},
-    {id:7,  name:'Gopal Varma',     roll:'22CS307', today:'', sessions:40, present:39},
-    {id:8,  name:'Harini Patel',    roll:'22CS308', today:'', sessions:40, present:32},
-    {id:9,  name:'Imran Khan',      roll:'22CS309', today:'', sessions:40, present:34},
-    {id:10, name:'Jyothi Srinivas', roll:'22CS310', today:'', sessions:40, present:37},
-  ];
-  let nextId = 11;
+  // Roll number generation — same logic as your original script.js
+  const sufix = [];
+  sufix.push("C9");
+  const startChar = 'D'.charCodeAt(0);
+  const endChar   = 'K'.charCodeAt(0);
+  for (let ch = startChar; ch <= endChar; ch++) {
+    if (String.fromCharCode(ch) === "I") continue;
+    for (let num = 0; num <= 9; num++) {
+      sufix.push(String.fromCharCode(ch) + num);
+      if (sufix.length === 64) break;
+    }
+    if (sufix.length === 64) break;
+  }
+  sufix.length = 64;
+  const prefix = "23881A05";
 
-  // ── Date ──────────────────────────────────────────────────────────────────
+  // YOUR real 64 students
+  const names = [
+    "ABBURI LAKSHMI HARIKA",
+    "AMEERUNNISA",
+    "AMUKANTI RAKESH KUMAR REDDY",
+    "AVULA SUPRABHATH",
+    "AYILURI BALARAM REDDY",
+    "BALE AKSHAY",
+    "BALUSA MOUNIKA",
+    "BOGGARAPU HRUTHIKIRAN",
+    "BOLLAM ROHITH KUMAR",
+    "D ABHISHEK YADAV",
+    "D VIJAYESHWARI",
+    "DHARAVATH SUSHMITHA",
+    "DODDA HARIKA",
+    "GAMPA ASHWITHA",
+    "GIDDALURI EUNICE BLESSY",
+    "GOLLA GOURI SHANKAR",
+    "GOLLE SAI MOHAN",
+    "GOVATHOTY JOSH KUMAR",
+    "GUNDRATHI PRERAN KUMAR",
+    "GURRAM THANUSHA",
+    "GUTHI VARUN TEJA",
+    "GUTTULA SAI PRIYA",
+    "HERAKAR NITHISH",
+    "KARYAMPUDI PRIYANKA",
+    "KATKAM SRIRAM",
+    "KETHAVATH ANIL",
+    "KOTHAPALLY KAVYASAI",
+    "KUCHIPATLA SUJITH ROHAN REDDY",
+    "KURAPATI DHANUSH",
+    "KUSUNURU JYOTHI",
+    "LAKSH DHAMIJA",
+    "LALKOTA KOUSHIK",
+    "M BHANU TEJA",
+    "MADI PUNITH REDDY",
+    "MANDA JHANSIVARDHINI",
+    "MOHD SARFARAZ",
+    "N RAKESH",
+    "NAINI MEGHANA",
+    "NAKKA DILEEP ADITYA",
+    "PALLY ANIRVESH",
+    "PANATULA JOTHSNA LAKSHMI UMASRI",
+    "PARANKUSAM TISHYATHI",
+    "PATHURI HASINI",
+    "PATLAVATH SHIVAKUMAR NAIK",
+    "PEDDAPATI MAMATHA",
+    "PIREDDY NAGA BHARGAV REDDY",
+    "POLA VAISHNAVI",
+    "PREETHAM KESHIREDDY",
+    "PULLELA SATHWIK",
+    "R RAJKUMAR",
+    "RANGU NANDESHWAR GOUD",
+    "SATHISH KODARI",
+    "SHAIK SHIREEN SUMAIAH",
+    "SIDDHARTH KARANAM",
+    "SRI SATYA SUBHAM PERI",
+    "SYEDA SAYEEDA FARHATH",
+    "T PALLAVI",
+    "TANGELLA PAVAN SAI REDDY",
+    "TOPALLE SIDDHA SANKALP",
+    "VADLA NANDAKISHORE",
+    "VEESAM ESHWAR PRASAD",
+    "VENNAPUREDDY SATHWIK",
+    "YELGANAMONI VIVEKVARDHAN",
+    "YERRAGINNELA MANISHANKAR"
+  ];
+
+  let students = names.map((name, i) => ({
+    id: i + 1,
+    name: name,
+    roll: prefix + sufix[i],
+    today: ''
+  }));
+  let nextId = students.length + 1;
+
   const now = new Date();
   document.getElementById('date-str').textContent =
-    'CSE-C · ' + now.toLocaleDateString('en-IN', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    'CSE-C · ' + now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-  function calcPct(s) {
-    const p = s.today === 'P' ? s.present + 1 : s.present;
-    const t = s.today !== '' ? s.sessions + 1 : s.sessions;
-    return t === 0 ? 0 : Math.round(p / t * 100);
-  }
-
-  function barColor(p) {
-    return p >= 75 ? '#639922' : p >= 60 ? '#BA7517' : '#E24B4A';
-  }
-
-  function resultBadge(p) {
-    if (p >= 75) return '<span class="badge badge-pass">Pass</span>';
-    if (p >= 60) return '<span class="badge badge-risk">At risk</span>';
-    return '<span class="badge badge-fail">Fail</span>';
-  }
-
-  // ── Toggle ────────────────────────────────────────────────────────────────
   function toggle(id, val) {
     const s = students.find(x => x.id === id);
     s.today = s.today === val ? '' : val;
     render();
   }
-
   function markAll(v) { students.forEach(s => s.today = v); render(); }
   function resetAll() { students.forEach(s => s.today = ''); render(); }
 
-  // ── Render ────────────────────────────────────────────────────────────────
   function render() {
     const q = (document.getElementById('search').value || '').toLowerCase();
-    const list = students.filter(s =>
-      s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q)
-    );
-
+    const list = students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q));
     const tbody = document.getElementById('tbody');
-
     if (list.length === 0) {
       tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No students found</td></tr>';
     } else {
-      tbody.innerHTML = list.map(s => {
-        const p = calcPct(s);
-        const todayUI = s.today === 'P'
-          ? '<span class="pill pill-p">Present</span>'
-          : s.today === 'A'
-          ? '<span class="pill pill-a">Absent</span>'
-          : '<span class="pill-u">Not marked</span>';
-
-        return `<tr>
-          <td style="font-weight:500">${s.name}</td>
-          <td style="color:var(--text2)">${s.roll}</td>
-          <td>
-            <div class="att-wrap">
-              <button class="att-btn present-btn" style="opacity:${s.today==='P'?1:0.4}"
-                onclick="toggle(${s.id},'P')" title="Mark present">✓</button>
-              <button class="att-btn absent-btn" style="opacity:${s.today==='A'?1:0.4}"
-                onclick="toggle(${s.id},'A')" title="Mark absent">✗</button>
-              ${todayUI}
-            </div>
-          </td>
-          <td>
-            <div class="pct-wrap">
-              <span class="pct-num">${p}%</span>
-              <div class="bar-bg">
-                <div class="bar-fill" style="width:${p}%;background:${barColor(p)}"></div>
-              </div>
-            </div>
-          </td>
-          <td>${resultBadge(p)}</td>
-        </tr>`;
-      }).join('');
+      tbody.innerHTML = list.map((s, idx) => `<tr>
+        <td style="color:var(--text2);font-size:12px">${idx+1}</td>
+        <td style="font-weight:500;font-size:13px">${s.name}</td>
+        <td style="color:var(--text2);font-size:12px">${s.roll}</td>
+        <td><div class="att-wrap">
+          <button class="att-btn pb" style="opacity:${s.today==='P'?1:0.35}" onclick="toggle(${s.id},'P')" title="Present">✓</button>
+          <button class="att-btn ab" style="opacity:${s.today==='A'?1:0.35}" onclick="toggle(${s.id},'A')" title="Absent">✗</button>
+          ${s.today==='P'?'<span class="pill pill-p">Present</span>':s.today==='A'?'<span class="pill pill-a">Absent</span>':'<span class="pill-u">Not marked</span>'}
+        </div></td>
+        <td><span class="badge ${s.today==='P'?'badge-pass':s.today==='A'?'badge-fail':'badge-none'}">${s.today==='P'?'Present':s.today==='A'?'Absent':'—'}</span></td>
+      </tr>`).join('');
     }
-
-    updateStats();
-    updateFooter();
+    updateStats(); updateFooter();
   }
 
   function updateStats() {
     const total   = students.length;
     const present = students.filter(s => s.today === 'P').length;
     const absent  = students.filter(s => s.today === 'A').length;
-    const avg     = Math.round(students.reduce((a, s) => a + calcPct(s), 0) / total);
-
+    const unmarked = students.filter(s => s.today === '').length;
     document.getElementById('stats-bar').innerHTML = `
       <div class="stat"><div class="stat-num">${total}</div><div class="stat-lbl">Total students</div></div>
-      <div class="stat"><div class="stat-num" style="color:var(--green-text)">${present}</div><div class="stat-lbl">Present today</div></div>
-      <div class="stat"><div class="stat-num" style="color:var(--red-text)">${absent}</div><div class="stat-lbl">Absent today</div></div>
-      <div class="stat"><div class="stat-num">${avg}%</div><div class="stat-lbl">Avg attendance</div></div>
-    `;
+      <div class="stat"><div class="stat-num" style="color:var(--green-text)">${present}</div><div class="stat-lbl">Present</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--red-text)">${absent}</div><div class="stat-lbl">Absent</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--text2)">${unmarked}</div><div class="stat-lbl">Not marked</div></div>`;
   }
 
   function updateFooter() {
-    const pEl = document.getElementById('present-chips');
-    const aEl = document.getElementById('absent-chips');
     const pList = students.filter(s => s.today === 'P');
     const aList = students.filter(s => s.today === 'A');
-    pEl.innerHTML = pList.length
+    document.getElementById('present-chips').innerHTML = pList.length
       ? pList.map(s => `<span class="chip chip-p">${s.name}</span>`).join('')
       : '<span class="empty-msg">No one marked yet</span>';
-    aEl.innerHTML = aList.length
+    document.getElementById('absent-chips').innerHTML = aList.length
       ? aList.map(s => `<span class="chip chip-a">${s.name}</span>`).join('')
       : '<span class="empty-msg">No one marked yet</span>';
   }
 
-  // ── Export CSV ────────────────────────────────────────────────────────────
   function exportCSV() {
-    const rows = [['Name','Roll No','Today','Overall %','Result']];
-    students.forEach(s => {
-      const p = calcPct(s);
-      const res = p >= 75 ? 'Pass' : p >= 60 ? 'At risk' : 'Fail';
-      rows.push([s.name, s.roll, s.today || 'Not marked', p + '%', res]);
-    });
-    const csv = rows.map(r => r.map(c => '"' + c + '"').join(',')).join('\n');
+    const rows = [['S.No','Name','Roll No','Today']];
+    students.forEach((s,i) => rows.push([i+1, s.name, s.roll, s.today||'Not marked']));
+    const csv = rows.map(r => r.map(c => '"'+c+'"').join(',')).join('\n');
     const a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-    a.download = 'CSE-C_attendance_' + now.toISOString().slice(0, 10) + '.csv';
-    a.click();
-    toast('CSV downloaded!');
+    a.download = 'CSE-C_attendance_' + now.toISOString().slice(0,10) + '.csv';
+    a.click(); toast('CSV downloaded!');
   }
 
-  // ── Export PDF ────────────────────────────────────────────────────────────
   function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Student Attendance Register — CSE-C', 14, 18);
-
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Date: ' + now.toLocaleDateString('en-IN', {weekday:'long',year:'numeric',month:'long',day:'numeric'}), 14, 26);
-
-    const headers = [['Name', 'Roll No', 'Today', 'Overall %', 'Result']];
-    const rows = students.map(s => {
-      const p = calcPct(s);
-      return [s.name, s.roll, s.today || 'Not marked', p + '%', p >= 75 ? 'Pass' : p >= 60 ? 'At risk' : 'Fail'];
+    doc.setFontSize(15); doc.setFont('helvetica','bold');
+    doc.text('Student Attendance Register — CSE-C', 14, 16);
+    doc.setFontSize(10); doc.setFont('helvetica','normal');
+    doc.text('Date: ' + now.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'}), 14, 23);
+    const present = students.filter(s=>s.today==='P').length;
+    const absent  = students.filter(s=>s.today==='A').length;
+    doc.text(`Present: ${present}   Absent: ${absent}   Total: ${students.length}`, 14, 30);
+    let y = 38;
+    const cols = [14,20,120,163];
+    doc.setFillColor(235,235,232); doc.rect(14,y,183,7,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+    ['#','Name','Roll No','Today'].forEach((h,i) => doc.text(h, cols[i]+1, y+5));
+    y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    students.forEach((s,i) => {
+      if (y > 278) { doc.addPage(); y = 14; }
+      if (i%2===0) { doc.setFillColor(250,250,248); doc.rect(14,y,183,6.5,'F'); }
+      doc.text(String(i+1), cols[0]+1, y+4.5);
+      doc.text(s.name.length>42?s.name.slice(0,42)+'…':s.name, cols[1]+1, y+4.5);
+      doc.text(s.roll, cols[2]+1, y+4.5);
+      doc.text(s.today==='P'?'Present':s.today==='A'?'Absent':'—', cols[3]+1, y+4.5);
+      y += 6.5;
     });
-
-    let y = 35;
-    const colW = [60, 28, 28, 28, 25];
-    const cols = [14, 74, 102, 130, 158];
-
-    doc.setFillColor(240, 240, 238);
-    doc.rect(14, y, 180, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    headers[0].forEach((h, i) => doc.text(h, cols[i] + 2, y + 5.5));
+    doc.setDrawColor(200,200,195); doc.rect(14,38,183,y-38,'S');
     y += 8;
-
-    doc.setFont('helvetica', 'normal');
-    rows.forEach((row, ri) => {
-      if (y > 270) { doc.addPage(); y = 20; }
-      if (ri % 2 === 0) { doc.setFillColor(250, 250, 248); doc.rect(14, y, 180, 8, 'F'); }
-      row.forEach((cell, i) => doc.text(String(cell), cols[i] + 2, y + 5.5));
-      y += 8;
-    });
-
-    doc.setDrawColor(200, 200, 195);
-    doc.rect(14, 35, 180, rows.length * 8 + 8, 'S');
-
-    y += 12;
-    const present = students.filter(s => s.today === 'P').map(s => s.name).join(', ') || 'None';
-    const absent  = students.filter(s => s.today === 'A').map(s => s.name).join(', ') || 'None';
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Presentees:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(present, 50, y, { maxWidth: 145 });
-    y += 10;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Absentees:', 14, y);
-    doc.setFont('helvetica', 'normal');
-    doc.text(absent, 50, y, { maxWidth: 145 });
-
-    doc.save('CSE-C_attendance_' + now.toISOString().slice(0, 10) + '.pdf');
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.text('Presentees:', 14, y);
+    doc.setFont('helvetica','normal');
+    const pN = students.filter(s=>s.today==='P').map(s=>s.name).join(', ')||'None';
+    const pL = doc.splitTextToSize(pN, 160); doc.text(pL, 14, y+5);
+    y += 5 + pL.length*5 + 4;
+    doc.setFont('helvetica','bold'); doc.text('Absentees:', 14, y);
+    doc.setFont('helvetica','normal');
+    const aN = students.filter(s=>s.today==='A').map(s=>s.name).join(', ')||'None';
+    const aL = doc.splitTextToSize(aN, 160); doc.text(aL, 14, y+5);
+    doc.save('CSE-C_attendance_' + now.toISOString().slice(0,10) + '.pdf');
     toast('PDF downloaded!');
   }
 
-  // ── Modal ─────────────────────────────────────────────────────────────────
-  function openModal() {
-    document.getElementById('modal-overlay').classList.add('open');
-    setTimeout(() => document.getElementById('m-name').focus(), 50);
-  }
-
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    ['m-name','m-roll','m-att'].forEach(id => document.getElementById(id).value = '');
-  }
-
+  function openModal() { document.getElementById('modal-overlay').classList.add('open'); setTimeout(()=>document.getElementById('m-name').focus(),50); }
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); ['m-name','m-roll'].forEach(id=>document.getElementById(id).value=''); }
   function addStudent() {
     const name = document.getElementById('m-name').value.trim();
     const roll = document.getElementById('m-roll').value.trim();
-    const att  = parseInt(document.getElementById('m-att').value) || 0;
-    if (!name || !roll) { toast('Please fill in name and roll number.'); return; }
-    students.push({ id: nextId++, name, roll, today: '', sessions: 40, present: Math.min(att, 40) });
-    closeModal();
-    render();
-    toast('Student added!');
+    if (!name||!roll) { toast('Please enter name and roll number.'); return; }
+    students.push({ id: nextId++, name: name.toUpperCase(), roll, today: '' });
+    closeModal(); render(); toast('Student added!');
   }
+  document.getElementById('modal-overlay').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
 
-  // Close modal on overlay click
-  document.getElementById('modal-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // ── Toast ─────────────────────────────────────────────────────────────────
   let toastTimer;
   function toast(msg) {
     const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
+    el.textContent = msg; el.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────────
   render();
 </script>
 </body>
